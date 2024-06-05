@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MFT.Abstractions\MFT.Abstractions.csproj" />
+    <ProjectReference Include="..\MFT.Logic\MFT.Logic.csproj" />
+  </ItemGroup>
+
 </Project>
