@@ -1,16 +1,26 @@
 ﻿// See https://aka.ms/new-console-template for more information
-
-
 using MFT.Abstractions;
-using MFT.Logic;
-using System.Diagnostics;
+using MFT.Logic.Extensions;
+using MFT.Logic.Services;
 
 IFileSystem fileSystem = new FileSystem();
 
-var stopWatch = Stopwatch.StartNew();
+var replicaDirectory = "C:\\GPhoto_2021";
+var originalDirectory = "D:\\photo\\2021";
+var resultDirectory = "C:\\Photo_Result";
 
-var files = fileSystem.GetFiles("D:\\photo\\2023");
+var modifiedFiles = fileSystem.GetFiles(replicaDirectory);
+Console.WriteLine($"{replicaDirectory} found {modifiedFiles.Count} files");
 
-stopWatch.Stop();
+var originalFiles = fileSystem.GetFiles(originalDirectory, modifiedFiles.GetUniqueFileExtenssions());
+Console.WriteLine($"{originalDirectory} found {originalFiles.Count} files");
 
-Console.WriteLine($"Found {files.Count}. Time elapsed {stopWatch.Elapsed}");
+// var sFiles = modifiedFiles.Except(originalFiles, new FileInfoSizeComparer()).ToList();
+
+var result = modifiedFiles.GetBiggerFiles(originalFiles);
+
+int count = fileSystem.CopyFiles(result, resultDirectory, "_bigger");
+Console.WriteLine($"{resultDirectory} copied {count} files");
+
+
+Console.ReadKey();
